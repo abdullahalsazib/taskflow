@@ -1,17 +1,43 @@
-# my_app
+# 🚀 Taskflow
 
-A new Flutter project.
+A modern, intuitive task management application built with Flutter. Taskflow helps you organize your daily activities, set priorities, and track your progress with a clean, beautifully designed user interface.
 
-## Getting Started
+## 📱 Screenshots
 
-This project is a starting point for a Flutter application.
+*(Tip: Add screenshots of your app here once you push the code!)*
+<p align="center">
+  <img src="assets/image1.png" width="200"/> 
+  <img src="assets/image3.png" width="200"/> 
+  <img src="assets/image4.png" width="200"/> 
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Features
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+* **Task Management:** Easily create, complete, and delete tasks.
+* **Priority Tagging:** Assign tasks as Low, Medium, or High priority with custom color-coded UI indicators.
+* **Smart Filtering:** Quickly filter your task list based on priority levels.
+* **Real-time Search:** Instantly find specific tasks using the built-in search functionality.
+* **Statistics Dashboard:** Track your productivity with a live overview of Total, Pending, and Completed tasks.
+* **State Management:** Fast and responsive UI updates powered by the `provider` package.
+* **Custom UI:** Beautiful gradient dialogs, custom icons, and smooth interactions.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Tech Stack
+
+* **Framework:** [Flutter](https://flutter.dev/)
+* **Language:** Dart
+* **State Management:** [Provider](https://pub.dev/packages/provider)
+
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally on your machine.
+
+### Prerequisites
+* Flutter SDK (Make sure Flutter is installed and configured)
+* An IDE like VS Code or Android Studio
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/abdullahalsazib/taskflow.git](https://github.com/abdullahalsazib/taskflow.git)
