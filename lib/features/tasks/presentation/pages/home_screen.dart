@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/dialogs/setting_dialog.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/taskflow_header.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     final tasks = provider.filteredTodos;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDFBFF),
+      backgroundColor: AppColors.background(context),
 
       body: SafeArea(
         child: Padding(
@@ -52,11 +53,11 @@ class HomeScreen extends StatelessWidget {
               // Tasks
               Expanded(
                 child: tasks.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
                           "No tasks found!",
                           style: TextStyle(
-                            color: Color(0xFF85838D),
+                            color: AppColors.textMuted(context),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -90,9 +91,14 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           showCreateTaskDialog(context);
         },
-        backgroundColor: const Color(0xFF4B4B94),
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text("Add Task", style: TextStyle(color: Colors.white)),
+        backgroundColor: Theme.of(
+          context,
+        ).floatingActionButtonTheme.backgroundColor,
+        foregroundColor: Theme.of(
+          context,
+        ).floatingActionButtonTheme.foregroundColor,
+        icon: const Icon(Icons.add),
+        label: const Text("Add Task"),
       ),
     );
   }

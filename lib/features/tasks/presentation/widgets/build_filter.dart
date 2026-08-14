@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 
 class BuildFilter extends StatelessWidget {
@@ -32,8 +33,8 @@ class BuildFilter extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 9),
               decoration: BoxDecoration(
                 color: selected
-                    ? const Color(0xFF4B4B94)
-                    : const Color(0xFFF3F1F8),
+                    ? Theme.of(context).colorScheme.primary
+                    : AppColors.softSurface(context),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
@@ -42,7 +43,9 @@ class BuildFilter extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: selected ? Colors.white : const Color(0xFF77747E),
+                    color: selected
+                        ? Colors.white
+                        : AppColors.textSecondary(context),
                   ),
                 ),
               ),

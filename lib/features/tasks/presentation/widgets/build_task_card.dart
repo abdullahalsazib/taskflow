@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/build_priority.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/dialogs/delete_dialog.dart';
@@ -25,11 +26,11 @@ class BuildTaskCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.card(context),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(7),
+            color: AppColors.shadow(context),
             blurRadius: 12,
             offset: const Offset(0, 3),
           ),
@@ -49,11 +50,11 @@ class BuildTaskCard extends StatelessWidget {
               height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: completed ? const Color(0xFF36C985) : Colors.transparent,
+                color: completed ? AppColors.success : Colors.transparent,
                 border: Border.all(
                   color: completed
-                      ? const Color(0xFF36C985)
-                      : const Color(0xFFD1CFD6),
+                      ? AppColors.success
+                      : AppColors.border(context),
                   width: 1.5,
                 ),
               ),
@@ -77,7 +78,7 @@ class BuildTaskCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF29272F),
+                    color: AppColors.textPrimary(context),
                     decoration: completed ? TextDecoration.lineThrough : null,
                   ),
                 ),
@@ -88,10 +89,10 @@ class BuildTaskCard extends StatelessWidget {
                   description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     height: 1.4,
-                    color: Color(0xFF92909A),
+                    color: AppColors.textMuted(context),
                   ),
                 ),
 
@@ -116,7 +117,10 @@ class BuildTaskCard extends StatelessWidget {
                 },
               );
             },
-            icon: const Icon(Icons.delete_outline_rounded),
+            icon: Icon(
+              Icons.delete_outline_rounded,
+              color: AppColors.textSecondary(context),
+            ),
           ),
         ],
       ),

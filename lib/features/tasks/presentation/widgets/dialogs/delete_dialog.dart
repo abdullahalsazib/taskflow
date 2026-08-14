@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 
 void showDeleteDialog({
   required BuildContext context,
@@ -15,7 +16,7 @@ void showDeleteDialog({
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Column(
@@ -27,20 +28,24 @@ void showDeleteDialog({
                 height: 68,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFFFF0D9),
+                  color: AppColors.priorityMediumBackground,
                 ),
                 child: const Icon(
                   Icons.warning_rounded,
-                  color: Color(0xFFFF9D25),
+                  color: AppColors.warning,
                   size: 38,
                 ),
               ),
 
               const SizedBox(height: 16),
 
-              const Text(
+              Text(
                 "Delete Task?",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary(context),
+                ),
               ),
 
               const SizedBox(height: 10),
@@ -49,10 +54,10 @@ void showDeleteDialog({
                 'Are you sure you want to delete "$taskTitle"? '
                 'This action cannot be undone.',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   height: 1.45,
-                  color: Color(0xFF898791),
+                  color: AppColors.textMuted(context),
                 ),
               ),
 
@@ -65,10 +70,10 @@ void showDeleteDialog({
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
+                      child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: Color(0xFFE3A548),
+                          color: AppColors.warning,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -84,7 +89,7 @@ void showDeleteDialog({
                         Navigator.pop(context); // Tarpor dialog bondho hobe
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFAA3D),
+                        backgroundColor: AppColors.warning,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 14),

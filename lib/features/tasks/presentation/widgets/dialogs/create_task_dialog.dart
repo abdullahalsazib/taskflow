@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/features/tasks/data/models/todo_model.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/buttons/priority_button.dart';
@@ -24,11 +25,7 @@ void showCreateTaskDialog(BuildContext context) {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF6254E7), Color(0xFF27C7DD)],
-                ),
+                gradient: AppColors.brandGradient,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

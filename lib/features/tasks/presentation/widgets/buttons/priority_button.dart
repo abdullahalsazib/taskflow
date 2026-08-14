@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 
 class PriorityButton extends StatelessWidget {
   // 1. Variable gulo ekhane define korte hobe
@@ -28,7 +29,7 @@ class PriorityButton extends StatelessWidget {
             color: isSelected ? Colors.white.withAlpha(35) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Colors.orangeAccent : Colors.white38,
+              color: isSelected ? AppColors.warning : Colors.white38,
             ),
           ),
           child: Center(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 
 class DialogIcon extends StatelessWidget {
   final IconData icon;
@@ -12,9 +13,7 @@ class DialogIcon extends StatelessWidget {
       height: 58,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: [Color(0xFF6254E7), Color(0xFF27C7DD)],
-        ),
+        gradient: AppColors.brandGradient,
       ),
       child: Icon(icon, color: Colors.white, size: 28),
     );

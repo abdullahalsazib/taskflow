@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
+import 'package:task_flow/core/theme/theme_provider.dart';
 import 'package:task_flow/features/tasks/presentation/pages/home_screen.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
-import 'package:provider/provider.dart'; //
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,16 +16,19 @@ void main() {
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      systemNavigationBarColor: Colors.blue,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => TodoProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TodoProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -35,13 +40,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
       title: 'TaskFlow',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      themeMode: themeProvider.themeMode,
+      theme: AppThemes.light,
+      darkTheme: AppThemes.dark,
       home: const HomeScreen(),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 
 class BuildStatistics extends StatelessWidget {
   const BuildStatistics({super.key});
@@ -11,8 +12,9 @@ class BuildStatistics extends StatelessWidget {
     return Row(
       children: [
         _buildStatCard(
+          context: context,
           icon: Icons.grid_view_rounded,
-          iconColor: const Color(0xFF4B4A91),
+          iconColor: AppColors.brandPrimary,
           number: todoProvider.totalTasks.toString(),
           title: "Total",
         ),
@@ -20,8 +22,9 @@ class BuildStatistics extends StatelessWidget {
         const SizedBox(width: 10),
 
         _buildStatCard(
+          context: context,
           icon: Icons.pending_actions_rounded,
-          iconColor: const Color(0xFFE5A83B),
+          iconColor: AppColors.warning,
           number: todoProvider.pendingTasks.toString(),
           title: "Pending",
         ),
@@ -29,8 +32,9 @@ class BuildStatistics extends StatelessWidget {
         const SizedBox(width: 10),
 
         _buildStatCard(
+          context: context,
           icon: Icons.check_circle_outline_rounded,
-          iconColor: const Color(0xFF40B88B),
+          iconColor: AppColors.success,
           number: todoProvider.completedTasks.toString(),
           title: "Done",
         ),
@@ -40,6 +44,7 @@ class BuildStatistics extends StatelessWidget {
 }
 
 Widget _buildStatCard({
+  required BuildContext context,
   required IconData icon,
   required Color iconColor,
   required String number,
@@ -50,11 +55,11 @@ Widget _buildStatCard({
       height: 88,
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.card(context),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(8),
+            color: AppColors.shadow(context),
             blurRadius: 12,
             offset: const Offset(0, 3),
           ),
@@ -69,12 +74,16 @@ Widget _buildStatCard({
 
           Text(
             number,
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textPrimary(context),
+            ),
           ),
 
           Text(
             title,
-            style: const TextStyle(fontSize: 11, color: Color(0xFF92909B)),
+            style: TextStyle(fontSize: 11, color: AppColors.textMuted(context)),
           ),
         ],
       ),

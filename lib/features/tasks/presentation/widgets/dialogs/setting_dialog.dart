@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_flow/core/theme/app_color.dart';
+import 'package:task_flow/core/theme/theme_provider.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
 
 void showSettingsDialog(BuildContext context) {
@@ -12,7 +15,7 @@ void showSettingsDialog(BuildContext context) {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Column(
@@ -22,14 +25,19 @@ void showSettingsDialog(BuildContext context) {
 
               const SizedBox(height: 12),
 
-              const Text(
+              Text(
                 "Settings",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary(context),
+                ),
               ),
 
               const SizedBox(height: 20),
 
               _settingsItem(
+                context: context,
                 icon: Icons.palette_outlined,
                 title: "Appearance",
                 onTap: () {
@@ -40,6 +48,7 @@ void showSettingsDialog(BuildContext context) {
               ),
 
               _settingsItem(
+                context: context,
                 icon: Icons.notifications_none_rounded,
                 title: "Notifications",
                 onTap: () {
@@ -49,6 +58,7 @@ void showSettingsDialog(BuildContext context) {
               ),
 
               _settingsItem(
+                context: context,
                 icon: Icons.info_outline_rounded,
                 title: "About",
                 onTap: () {
@@ -63,10 +73,10 @@ void showSettingsDialog(BuildContext context) {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
+                child: Text(
                   "Close",
                   style: TextStyle(
-                    color: Color(0xFF6663A4),
+                    color: AppColors.brandPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -80,6 +90,7 @@ void showSettingsDialog(BuildContext context) {
 }
 
 Widget _settingsItem({
+  required BuildContext context,
   required IconData icon,
   required String title,
   required VoidCallback onTap,
@@ -91,21 +102,25 @@ Widget _settingsItem({
       padding: const EdgeInsets.symmetric(vertical: 11),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: const Color(0xFF5B5870)),
+          Icon(icon, size: 18, color: AppColors.textSecondary(context)),
 
           const SizedBox(width: 12),
 
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary(context),
+              ),
             ),
           ),
 
-          const Icon(
+          Icon(
             Icons.chevron_right_rounded,
             size: 19,
-            color: Color(0xFF9A98A3),
+            color: AppColors.textMuted(context),
           ),
         ],
       ),
@@ -131,11 +146,7 @@ void showNotificationSettings(BuildContext context) {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF6254E7), Color(0xFF27C7DD)],
-                ),
+                gradient: AppColors.brandGradient,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -253,7 +264,7 @@ Widget _switchItem({
         value: value,
         onChanged: onChanged,
         activeThumbColor: Colors.white,
-        activeTrackColor: const Color(0xFF6254E7),
+        activeTrackColor: AppColors.brandPrimary,
       ),
     ],
   );
@@ -269,7 +280,7 @@ void showAboutDialog(BuildContext context) {
         child: Container(
           padding: const EdgeInsets.fromLTRB(18, 20, 18, 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(22),
           ),
           child: Column(
@@ -279,14 +290,18 @@ void showAboutDialog(BuildContext context) {
 
               const SizedBox(height: 12),
 
-              const Text(
+              Text(
                 "About TaskFlow",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary(context),
+                ),
               ),
 
               const SizedBox(height: 10),
 
-              const Text(
+              Text(
                 "TaskFlow v1.0.0 — a productivity dashboard "
                 "built with Flutter and powered by the "
                 "provider package for beautiful, maintainable "
@@ -295,7 +310,7 @@ void showAboutDialog(BuildContext context) {
                 style: TextStyle(
                   fontSize: 11,
                   height: 1.45,
-                  color: Color(0xFF8D8A95),
+                  color: AppColors.textMuted(context),
                 ),
               ),
 
@@ -308,7 +323,7 @@ void showAboutDialog(BuildContext context) {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF347FE5),
+                    backgroundColor: AppColors.brandPrimary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(vertical: 13),
@@ -328,7 +343,7 @@ void showAboutDialog(BuildContext context) {
 }
 
 void showAppearanceDialog(BuildContext context) {
-  String selectedTheme = "Light Mode";
+  AppThemeMode selectedTheme = context.read<ThemeProvider>().selectedMode;
 
   showDialog(
     context: context,
@@ -342,7 +357,7 @@ void showAppearanceDialog(BuildContext context) {
             child: Container(
               padding: const EdgeInsets.fromLTRB(18, 20, 18, 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface(context),
                 borderRadius: BorderRadius.circular(22),
               ),
               child: Column(
@@ -354,12 +369,12 @@ void showAppearanceDialog(BuildContext context) {
                   const SizedBox(height: 12),
 
                   // Title
-                  const Text(
+                  Text(
                     "Choose Appearance",
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF20202A),
+                      color: AppColors.textPrimary(context),
                     ),
                   ),
 
@@ -367,12 +382,13 @@ void showAppearanceDialog(BuildContext context) {
 
                   // Light Mode
                   _themeOption(
+                    context: context,
                     title: "Light Mode",
                     icon: Icons.light_mode_outlined,
-                    selected: selectedTheme == "Light Mode",
+                    selected: selectedTheme == AppThemeMode.light,
                     onTap: () {
                       setState(() {
-                        selectedTheme = "Light Mode";
+                        selectedTheme = AppThemeMode.light;
                       });
                     },
                   ),
@@ -381,12 +397,13 @@ void showAppearanceDialog(BuildContext context) {
 
                   // Dark Mode
                   _themeOption(
+                    context: context,
                     title: "Dark Mode",
                     icon: Icons.dark_mode_outlined,
-                    selected: selectedTheme == "Dark Mode",
+                    selected: selectedTheme == AppThemeMode.dark,
                     onTap: () {
                       setState(() {
-                        selectedTheme = "Dark Mode";
+                        selectedTheme = AppThemeMode.dark;
                       });
                     },
                   ),
@@ -395,12 +412,13 @@ void showAppearanceDialog(BuildContext context) {
 
                   // System Default
                   _themeOption(
+                    context: context,
                     title: "System Default",
                     icon: Icons.settings_suggest_outlined,
-                    selected: selectedTheme == "System Default",
+                    selected: selectedTheme == AppThemeMode.system,
                     onTap: () {
                       setState(() {
-                        selectedTheme = "System Default";
+                        selectedTheme = AppThemeMode.system;
                       });
                     },
                   ),
@@ -415,10 +433,10 @@ void showAppearanceDialog(BuildContext context) {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: Color(0xFF665DA7),
+                              color: AppColors.brandPrimary,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                             ),
@@ -430,14 +448,16 @@ void showAppearanceDialog(BuildContext context) {
 
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            // এখানে পরে ThemeProvider
-                            // ব্যবহার করবে।
-
+                          onPressed: () async {
+                            await context.read<ThemeProvider>().setThemeMode(
+                              selectedTheme,
+                            );
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF5D4BE8),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                             foregroundColor: Colors.white,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -467,6 +487,7 @@ void showAppearanceDialog(BuildContext context) {
 }
 
 Widget _themeOption({
+  required BuildContext context,
   required String title,
   required IconData icon,
   required bool selected,
@@ -479,31 +500,39 @@ Widget _themeOption({
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: selected ? const Color(0xFFF0ECFA) : const Color(0xFFFAF9FC),
+        color: selected
+            ? AppColors.optionSelectedBackground(context)
+            : AppColors.optionBackground(context),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selected ? const Color(0xFF7165A8) : const Color(0xFFF0EEF4),
+          color: selected
+              ? Theme.of(context).colorScheme.primary
+              : AppColors.borderSoft(context),
         ),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 15, color: const Color(0xFF66636F)),
+          Icon(icon, size: 15, color: AppColors.textSecondary(context)),
 
           const SizedBox(width: 9),
 
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF33313A),
+                color: AppColors.textPrimary(context),
               ),
             ),
           ),
 
           if (selected)
-            const Icon(Icons.check_circle, size: 15, color: Color(0xFF4F477D)),
+            Icon(
+              Icons.check_circle,
+              size: 15,
+              color: Theme.of(context).colorScheme.primary,
+            ),
         ],
       ),
     ),

@@ -1,5 +1,6 @@
 // taskflow_header.dart
 import 'package:flutter/material.dart';
+import 'package:task_flow/core/theme/app_color.dart';
 
 class TaskflowHeader extends StatelessWidget {
   // Callback for the settings button so the parent can handle the logic
@@ -9,13 +10,16 @@ class TaskflowHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleColor = AppColors.textPrimary(context);
+    final subtitleColor = AppColors.textSecondary(context);
+
     return Row(
       children: [
         Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: const Color(0xFF62508F),
+            color: AppColors.brandPrimary,
             borderRadius: BorderRadius.circular(15),
           ),
           child: const Icon(
@@ -27,7 +31,7 @@ class TaskflowHeader extends StatelessWidget {
 
         const SizedBox(width: 12),
 
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -36,13 +40,13 @@ class TaskflowHeader extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF24232B),
+                  color: titleColor,
                 ),
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 "Stay productive, stay organized",
-                style: TextStyle(fontSize: 12, color: Color(0xFF9A98A3)),
+                style: TextStyle(fontSize: 12, color: subtitleColor),
               ),
             ],
           ),
@@ -52,12 +56,15 @@ class TaskflowHeader extends StatelessWidget {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: const Color(0xFFF3F1F8),
+            color: AppColors.softSurface(context),
             borderRadius: BorderRadius.circular(14),
           ),
           child: IconButton(
             onPressed: onSettingsPressed, // Use the callback here
-            icon: const Icon(Icons.settings_outlined),
+            icon: Icon(
+              Icons.settings_outlined,
+              color: AppColors.textSecondary(context),
+            ),
           ),
         ),
       ],
