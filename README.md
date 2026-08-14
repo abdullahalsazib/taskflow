@@ -1,10 +1,12 @@
-# 🚀 Taskflow
+
+<img src="assets/images/app_logo.png" width="100"/> 
+
+# 🚀 Taskflow 
 
 A modern, intuitive task management application built with Flutter. Taskflow helps you organize your daily activities, set priorities, and track your progress with a clean, beautifully designed user interface.
 
 ## 📱 Screenshots
 
-*(Tip: Add screenshots of your app here once you push the code!)*
 <p align="center">
   <img src="assets/image1.png" width="200"/> 
   <img src="assets/image3.png" width="200"/> 
@@ -36,8 +38,3 @@ Follow these steps to run the project locally on your machine.
 * Flutter SDK (Make sure Flutter is installed and configured)
 * An IDE like VS Code or Android Studio
 
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/abdullahalsazib/taskflow.git](https://github.com/abdullahalsazib/taskflow.git)
