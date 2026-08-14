@@ -167,7 +167,7 @@ void showNotificationSettings(BuildContext context) {
                   const SizedBox(height: 20),
 
                   _switchItem(
-                    title: "Push Notifications (3h)",
+                    title: "Push Notifications (30s)",
                     value: settings.pushNotificationsEnabled,
                     onChanged: (value) {
                       unawaited(
@@ -180,7 +180,7 @@ void showNotificationSettings(BuildContext context) {
                   ),
 
                   _switchItem(
-                    title: "Daily Reminders (12h)",
+                    title: "Daily Reminders (60s)",
                     value: settings.dailyReminderEnabled,
                     onChanged: (value) {
                       unawaited(

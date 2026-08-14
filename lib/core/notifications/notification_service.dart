@@ -22,6 +22,10 @@ class NotificationService {
   static const String _dailySoundChannelId = 'task_daily_reminder_sound';
   static const String _dailySilentChannelId = 'task_daily_reminder_silent';
 
+  // Temporary test delays. Switch back to 3h/12h for production.
+  static const Duration _uncompletedDelay = Duration(seconds: 30);
+  static const Duration _dailyDelay = Duration(seconds: 60);
+
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
@@ -128,8 +132,8 @@ class NotificationService {
       await _scheduleNotification(
         id: _uncompletedNotificationId(todo.id),
         title: 'Task still uncompleted',
-        body: '"${todo.title}" is still pending. Check it after 3 hours.',
-        delay: const Duration(hours: 3),
+        body: '"${todo.title}" is still pending. Reminder after 30 seconds.',
+        delay: _uncompletedDelay,
         useDailySound: false,
         soundEnabled: settings.soundEnabled,
       );
@@ -141,8 +145,8 @@ class NotificationService {
       await _scheduleNotification(
         id: _dailyNotificationId(todo.id),
         title: 'Task reminder',
-        body: 'Reminder after 12 hours for "${todo.title}".',
-        delay: const Duration(hours: 12),
+        body: 'Reminder after 60 seconds for "${todo.title}".',
+        delay: _dailyDelay,
         useDailySound: true,
         soundEnabled: settings.soundEnabled,
       );
@@ -165,8 +169,8 @@ class NotificationService {
       _channelIdFor(useDailySound: useDailySound, soundEnabled: soundEnabled),
       useDailySound ? 'Daily reminders' : 'Uncompleted task reminders',
       channelDescription: useDailySound
-          ? 'Reminder notifications for tasks after 12 hours'
-          : 'Notifications for uncompleted tasks after 3 hours',
+          ? 'Reminder notifications for tasks after 60 seconds'
+          : 'Notifications for uncompleted tasks after 30 seconds',
       importance: Importance.high,
       priority: Priority.high,
       playSound: soundEnabled,
@@ -230,7 +234,7 @@ class NotificationService {
       const AndroidNotificationChannel(
         _uncompletedSoundChannelId,
         'Uncompleted task reminders (sound)',
-        description: 'Alerts for uncompleted tasks after 3 hours',
+        description: 'Alerts for uncompleted tasks after 30 seconds',
         importance: Importance.high,
         playSound: true,
         sound: RawResourceAndroidNotificationSound('sound2'),
@@ -241,7 +245,7 @@ class NotificationService {
       const AndroidNotificationChannel(
         _uncompletedSilentChannelId,
         'Uncompleted task reminders (silent)',
-        description: 'Silent alerts for uncompleted tasks after 3 hours',
+        description: 'Silent alerts for uncompleted tasks after 30 seconds',
         importance: Importance.high,
         playSound: false,
       ),
@@ -251,7 +255,7 @@ class NotificationService {
       const AndroidNotificationChannel(
         _dailySoundChannelId,
         'Daily reminders (sound)',
-        description: 'Alerts for task reminders after 12 hours',
+        description: 'Alerts for task reminders after 60 seconds',
         importance: Importance.high,
         playSound: true,
         sound: RawResourceAndroidNotificationSound('sound1'),
@@ -262,7 +266,7 @@ class NotificationService {
       const AndroidNotificationChannel(
         _dailySilentChannelId,
         'Daily reminders (silent)',
-        description: 'Silent alerts for task reminders after 12 hours',
+        description: 'Silent alerts for task reminders after 60 seconds',
         importance: Importance.high,
         playSound: false,
       ),
