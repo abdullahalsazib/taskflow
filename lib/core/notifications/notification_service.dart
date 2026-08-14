@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_flow/features/tasks/data/models/todo_model.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
@@ -22,7 +23,7 @@ class NotificationService {
   static const String _dailySoundChannelId = 'task_daily_reminder_sound';
   static const String _dailySilentChannelId = 'task_daily_reminder_silent';
 
-  // Temporary test delays. Switch back to 3h/12h for production.
+  // Delays for notifications (30s for pending task alert, 60s for task reminder).
   static const Duration _uncompletedDelay = Duration(seconds: 30);
   static const Duration _dailyDelay = Duration(seconds: 60);
 
@@ -36,39 +37,77 @@ class NotificationService {
       return;
     }
 
-    tz_data.initializeTimeZones();
+    await _configureLocalTimeZone();
 
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
-    const iosSettings = DarwinInitializationSettings(
+    const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
+      defaultPresentAlert: true,
+      defaultPresentSound: true,
+      defaultPresentBadge: true,
+      defaultPresentBanner: true,
+      defaultPresentList: true,
+    );
+    const linuxSettings = LinuxInitializationSettings(
+      defaultActionName: 'Open notification',
     );
 
     await _plugin.initialize(
-      const InitializationSettings(android: androidSettings, iOS: iosSettings),
+      const InitializationSettings(
+        android: androidSettings,
+        iOS: darwinSettings,
+        macOS: darwinSettings,
+        linux: linuxSettings,
+      ),
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        // Notification action / tap callback
+      },
     );
 
     await _createAndroidChannels();
     _isInitialized = true;
   }
 
+  Future<void> _configureLocalTimeZone() async {
+    tz_data.initializeTimeZones();
+    try {
+      final dynamic tzInfo = await FlutterTimezone.getLocalTimezone();
+      final String timeZoneName = tzInfo is String ? tzInfo : (tzInfo.name ?? tzInfo.identifier ?? tzInfo.toString());
+      tz.setLocalLocation(tz.getLocation(timeZoneName));
+    } catch (_) {
+      try {
+        tz.setLocalLocation(tz.getLocation('UTC'));
+      } catch (_) {}
+    }
+  }
+
   Future<void> requestPermissions() async {
     await initialize();
 
-    final android = _plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-    await android?.requestNotificationsPermission();
-
-    final ios = _plugin
-        .resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin
-        >();
-    await ios?.requestPermissions(alert: true, badge: true, sound: true);
+    if (Platform.isAndroid) {
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      await android?.requestNotificationsPermission();
+      await android?.requestExactAlarmsPermission();
+    } else if (Platform.isIOS) {
+      final ios = _plugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      await ios?.requestPermissions(alert: true, badge: true, sound: true);
+    } else if (Platform.isMacOS) {
+      final macOS = _plugin
+          .resolvePlatformSpecificImplementation<
+            MacOSFlutterLocalNotificationsPlugin
+          >();
+      await macOS?.requestPermissions(alert: true, badge: true, sound: true);
+    }
   }
 
   Future<bool> getPushNotificationsEnabled() async {
@@ -118,6 +157,44 @@ class NotificationService {
     await initialize();
     await _plugin.cancel(_uncompletedNotificationId(taskId));
     await _plugin.cancel(_dailyNotificationId(taskId));
+  }
+
+  Future<void> showTestNotification() async {
+    await initialize();
+    final settings = await _readSettings();
+
+    final androidDetails = AndroidNotificationDetails(
+      _channelIdFor(useDailySound: true, soundEnabled: settings.soundEnabled),
+      'Daily reminders',
+      channelDescription: 'Reminder notifications for tasks',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: settings.soundEnabled,
+      sound: settings.soundEnabled
+          ? const RawResourceAndroidNotificationSound('sound1')
+          : null,
+    );
+
+    final darwinDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: settings.soundEnabled,
+      presentBanner: true,
+      presentList: true,
+      sound: settings.soundEnabled ? 'sound1.wav' : null,
+    );
+
+    await _plugin.show(
+      0,
+      'TaskFlow Notification Test',
+      'Notifications and sounds are configured successfully!',
+      NotificationDetails(
+        android: androidDetails,
+        iOS: darwinDetails,
+        macOS: darwinDetails,
+      ),
+      payload: 'test_notification',
+    );
   }
 
   Future<void> _syncSingleTodo(TodoModel todo) async {
@@ -171,7 +248,7 @@ class NotificationService {
       channelDescription: useDailySound
           ? 'Reminder notifications for tasks after 60 seconds'
           : 'Notifications for uncompleted tasks after 30 seconds',
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
       playSound: soundEnabled,
       sound: soundEnabled
@@ -185,22 +262,46 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: soundEnabled,
+      presentBanner: true,
+      presentList: true,
       sound: soundEnabled
           ? (useDailySound ? 'sound1.wav' : 'sound2.mp3')
           : null,
     );
 
-    await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledAt,
-      NotificationDetails(android: androidDetails, iOS: iosDetails),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: 'task_reminder',
+    final notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+      macOS: iosDetails,
     );
+
+    try {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledAt,
+        notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: 'task_reminder',
+      );
+    } catch (_) {
+      try {
+        await _plugin.zonedSchedule(
+          id,
+          title,
+          body,
+          scheduledAt,
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: 'task_reminder',
+        );
+      } catch (_) {}
+    }
   }
 
   String _channelIdFor({

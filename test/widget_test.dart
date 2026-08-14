@@ -1,30 +1,43 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:task_flow/main.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_flow/core/theme/app_color.dart';
+import 'package:task_flow/core/theme/theme_provider.dart';
+import 'package:task_flow/features/tasks/presentation/pages/home_screen.dart';
+import 'package:task_flow/features/tasks/presentation/providers/notification_settings_provider.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('TaskFlow HomeScreen renders correctly', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => TodoProvider()),
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => NotificationSettingsProvider()),
+        ],
+        child: MaterialApp(
+          theme: AppThemes.light,
+          darkTheme: AppThemes.dark,
+          home: const HomeScreen(),
+        ),
+      ),
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpAndSettle();
+
+    // Verify header and main UI elements are displayed
+    expect(find.text('TaskFlow'), findsOneWidget);
+    expect(find.text('Add Task'), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
   });
 }

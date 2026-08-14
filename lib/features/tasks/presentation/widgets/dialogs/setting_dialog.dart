@@ -151,7 +151,7 @@ void showNotificationSettings(BuildContext context) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  DialogIcon(icon: Icons.dashboard_customize_rounded),
+                  const DialogIcon(icon: Icons.notifications_active_rounded),
 
                   const SizedBox(height: 12),
 
@@ -214,6 +214,38 @@ void showNotificationSettings(BuildContext context) {
                   const Text(
                     "Uncompleted task sound: sound2.mp3",
                     style: TextStyle(color: Colors.white70, fontSize: 10),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        await settings.sendTestNotification();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Test notification sent!"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.notifications_active, size: 16),
+                      label: const Text(
+                        "Send Test Notification",
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.white70),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 15),
@@ -469,10 +501,11 @@ void showAppearanceDialog(BuildContext context) {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
+                            final navigator = Navigator.of(context);
                             await context.read<ThemeProvider>().setThemeMode(
                               selectedTheme,
                             );
-                            Navigator.pop(context);
+                            navigator.pop();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(

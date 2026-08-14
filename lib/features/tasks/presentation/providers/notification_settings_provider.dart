@@ -25,6 +25,15 @@ class NotificationSettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> requestPermissions() async {
+    await NotificationService.instance.requestPermissions();
+  }
+
+  Future<void> sendTestNotification() async {
+    await NotificationService.instance.requestPermissions();
+    await NotificationService.instance.showTestNotification();
+  }
+
   Future<void> setPushNotificationsEnabled(
     bool value,
     List<TodoModel> todos,
