@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:task_flow/core/notifications/notification_service.dart';
 import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/core/theme/theme_provider.dart';
 import 'package:task_flow/features/tasks/presentation/pages/home_screen.dart';
+import 'package:task_flow/features/tasks/presentation/providers/notification_settings_provider.dart';
 import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.instance.initialize();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
@@ -28,6 +31,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => TodoProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(
+          create: (context) => NotificationSettingsProvider(),
+        ),
       ],
       child: const MyApp(),
     ),

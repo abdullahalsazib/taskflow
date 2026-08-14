@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_flow/core/theme/app_color.dart';
 import 'package:task_flow/core/theme/theme_provider.dart';
+import 'package:task_flow/features/tasks/presentation/providers/notification_settings_provider.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:task_flow/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
 
 void showSettingsDialog(BuildContext context) {
@@ -129,16 +133,12 @@ Widget _settingsItem({
 }
 
 void showNotificationSettings(BuildContext context) {
-  bool pushNotification = true;
-  bool dailyReminder = true;
-  bool soundEffects = false;
-
   showDialog(
     context: context,
     barrierColor: Colors.black45,
     builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
+      return Consumer2<NotificationSettingsProvider, TodoProvider>(
+        builder: (context, settings, todoProvider, _) {
           return Dialog(
             backgroundColor: Colors.transparent,
             insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -167,33 +167,53 @@ void showNotificationSettings(BuildContext context) {
                   const SizedBox(height: 20),
 
                   _switchItem(
-                    title: "Push Notifications",
-                    value: pushNotification,
+                    title: "Push Notifications (3h)",
+                    value: settings.pushNotificationsEnabled,
                     onChanged: (value) {
-                      setState(() {
-                        pushNotification = value;
-                      });
+                      unawaited(
+                        settings.setPushNotificationsEnabled(
+                          value,
+                          todoProvider.todos,
+                        ),
+                      );
                     },
                   ),
 
                   _switchItem(
-                    title: "Daily Reminders",
-                    value: dailyReminder,
+                    title: "Daily Reminders (12h)",
+                    value: settings.dailyReminderEnabled,
                     onChanged: (value) {
-                      setState(() {
-                        dailyReminder = value;
-                      });
+                      unawaited(
+                        settings.setDailyReminderEnabled(
+                          value,
+                          todoProvider.todos,
+                        ),
+                      );
                     },
                   ),
 
                   _switchItem(
                     title: "Sound Effects",
-                    value: soundEffects,
+                    value: settings.soundEffectsEnabled,
                     onChanged: (value) {
-                      setState(() {
-                        soundEffects = value;
-                      });
+                      unawaited(
+                        settings.setSoundEffectsEnabled(
+                          value,
+                          todoProvider.todos,
+                        ),
+                      );
                     },
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    "Daily reminder sound: sound1.wav",
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
+                  ),
+                  const Text(
+                    "Uncompleted task sound: sound2.mp3",
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
                   ),
 
                   const SizedBox(height: 15),

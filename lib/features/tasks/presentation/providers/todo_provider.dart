@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:task_flow/core/notifications/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_flow/features/tasks/data/models/todo_model.dart';
 
@@ -27,6 +29,8 @@ class TodoProvider extends ChangeNotifier {
       _todos = decodedList.map((item) => TodoModel.fromMap(item)).toList();
       notifyListeners(); // Rebuild UI after loading data
     }
+
+    unawaited(NotificationService.instance.syncForTodos(_todos));
   }
 
   // Save current state to SharedPreferences
@@ -71,6 +75,7 @@ class TodoProvider extends ChangeNotifier {
   void addTodo(TodoModel todo) {
     _todos.add(todo);
     _saveToPrefs();
+    unawaited(NotificationService.instance.scheduleForNewTask(todo));
     notifyListeners();
   }
 
@@ -82,7 +87,13 @@ class TodoProvider extends ChangeNotifier {
       _todos[index] = _todos[index].copyWith(
         isCompleted: !_todos[index].isCompleted,
       );
+      final updatedTodo = _todos[index];
       _saveToPrefs();
+      if (updatedTodo.isCompleted) {
+        unawaited(NotificationService.instance.cancelForTask(updatedTodo.id));
+      } else {
+        unawaited(NotificationService.instance.scheduleForNewTask(updatedTodo));
+      }
       notifyListeners();
     }
   }
@@ -91,6 +102,7 @@ class TodoProvider extends ChangeNotifier {
   void deleteTodo(String id) {
     _todos.removeWhere((todo) => todo.id == id);
     _saveToPrefs();
+    unawaited(NotificationService.instance.cancelForTask(id));
     notifyListeners();
   }
 
