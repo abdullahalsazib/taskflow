@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:my_app/features/tasks/presentation/providers/todo_provider.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 
 class BuildFilter extends StatelessWidget {
   const BuildFilter({super.key});

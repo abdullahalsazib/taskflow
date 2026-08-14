@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:my_app/features/tasks/data/models/todo_model.dart';
+import 'package:task_flow/features/tasks/data/models/todo_model.dart';
 
 class TodoProvider extends ChangeNotifier {
   // Private list of todos

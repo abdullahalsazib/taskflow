@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:my_app/features/tasks/data/models/todo_model.dart';
-import 'package:my_app/features/tasks/presentation/providers/todo_provider.dart';
-import 'package:my_app/features/tasks/presentation/widgets/buttons/priority_button.dart';
-import 'package:my_app/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
+import 'package:task_flow/features/tasks/data/models/todo_model.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/buttons/priority_button.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
 
 void showCreateTaskDialog(BuildContext context) {
   final titleController = TextEditingController();

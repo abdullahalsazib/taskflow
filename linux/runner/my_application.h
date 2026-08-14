@@ -1,21 +1,21 @@
-#ifndef FLUTTER_MY_APPLICATION_H_
-#define FLUTTER_MY_APPLICATION_H_
+#ifndef FLUTTER_task_flowLICATION_H_
+#define FLUTTER_task_flowLICATION_H_
 
 #include <gtk/gtk.h>
 
 G_DECLARE_FINAL_TYPE(MyApplication,
-                     my_application,
+                     task_flowlication,
                      MY,
                      APPLICATION,
                      GtkApplication)
 
 /**
- * my_application_new:
+ * task_flowlication_new:
  *
  * Creates a new Flutter-based application.
  *
  * Returns: a new #MyApplication.
  */
-MyApplication* my_application_new();
+MyApplication* task_flowlication_new();
 
-#endif  // FLUTTER_MY_APPLICATION_H_
+#endif  // FLUTTER_task_flowLICATION_H_

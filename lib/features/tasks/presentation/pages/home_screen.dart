@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:my_app/features/tasks/presentation/providers/todo_provider.dart';
-import 'package:my_app/features/tasks/presentation/widgets/dialogs/setting_dialog.dart';
-import 'package:my_app/features/tasks/presentation/widgets/taskflow_header.dart';
-import 'package:my_app/features/tasks/presentation/widgets/build_filter.dart';
-import 'package:my_app/features/tasks/presentation/widgets/build_search.dart';
-import 'package:my_app/features/tasks/presentation/widgets/build_statistics.dart';
-import 'package:my_app/features/tasks/presentation/widgets/build_task_card.dart';
-import 'package:my_app/features/tasks/presentation/widgets/dialogs/create_task_dialog.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/dialogs/setting_dialog.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/taskflow_header.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/build_filter.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/build_search.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/build_statistics.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/build_task_card.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/dialogs/create_task_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

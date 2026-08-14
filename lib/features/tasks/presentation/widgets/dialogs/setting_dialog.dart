@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/buttons/dialog_icon.dart';
 
 void showSettingsDialog(BuildContext context) {
   showDialog(

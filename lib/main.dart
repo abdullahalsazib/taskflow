@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/features/tasks/presentation/pages/home_screen.dart';
-import 'package:my_app/features/tasks/presentation/providers/todo_provider.dart';
+import 'package:task_flow/features/tasks/presentation/pages/home_screen.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
 import 'package:provider/provider.dart'; //
 
 void main() {

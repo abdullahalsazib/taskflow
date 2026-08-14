@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:my_app/features/tasks/presentation/providers/todo_provider.dart';
-import 'package:my_app/features/tasks/presentation/widgets/build_priority.dart';
-import 'package:my_app/features/tasks/presentation/widgets/dialogs/delete_dialog.dart';
+import 'package:task_flow/features/tasks/presentation/providers/todo_provider.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/build_priority.dart';
+import 'package:task_flow/features/tasks/presentation/widgets/dialogs/delete_dialog.dart';
 
 class BuildTaskCard extends StatelessWidget {
   final String id;
