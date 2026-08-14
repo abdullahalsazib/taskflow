@@ -4,7 +4,7 @@ class TodoModel {
   final String title;
   final String description;
   final String priority; // high, medium, low
-  final bool isCompleted; // Changed to final for best practices
+  final bool isCompleted;
 
   TodoModel({
     required this.id,
@@ -14,7 +14,6 @@ class TodoModel {
     this.isCompleted = false,
   });
 
-  // Since variables are final, we use copyWith to change values
   TodoModel copyWith({
     String? id,
     String? title,
@@ -28,6 +27,28 @@ class TodoModel {
       description: description ?? this.description,
       priority: priority ?? this.priority,
       isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
+
+  // Convert object to Map for SharedPreferences
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'priority': priority,
+      'isCompleted': isCompleted,
+    };
+  }
+
+  // Create TodoModel from Map (Local Storage)
+  factory TodoModel.fromMap(Map<String, dynamic> map) {
+    return TodoModel(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      priority: map['priority'] ?? 'low',
+      isCompleted: map['isCompleted'] ?? false,
     );
   }
 }

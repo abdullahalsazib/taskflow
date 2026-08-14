@@ -1,36 +1,44 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_flow/features/tasks/data/models/todo_model.dart';
 
 class TodoProvider extends ChangeNotifier {
   // Private list of todos
-  final List<TodoModel> _todos = [
-    TodoModel(
-      id: '1',
-      title: 'Buy groceries',
-      description: 'Milk, eggs, bread, and fresh vegetables from the market.',
-      priority: 'high',
-      isCompleted: false,
-    ),
-    TodoModel(
-      id: '2',
-      title: 'Finish Flutter UI design',
-      description:
-          'Complete the dashboard screen mockup and check responsiveness.',
-      priority: 'medium',
-      isCompleted: false,
-    ),
-    TodoModel(
-      id: '3',
-      title: 'Call the dentist',
-      description: 'Schedule the routine checkup for next Tuesday afternoon.',
-      priority: 'low',
-      isCompleted: true,
-    ),
-  ];
+  List<TodoModel> _todos = [];
 
   String _searchQuery = "";
-
   String _filterPriority = "All";
+
+  // Constructor initializes data loading
+  TodoProvider() {
+    _loadTodos();
+  }
+
+  // ---------------- LOCAL STORAGE LOGIC ---------------- //
+
+  // Load data from SharedPreferences
+  Future<void> _loadTodos() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? todosString = prefs.getString('saved_todos');
+
+    if (todosString != null) {
+      final List<dynamic> decodedList = jsonDecode(todosString);
+      _todos = decodedList.map((item) => TodoModel.fromMap(item)).toList();
+      notifyListeners(); // Rebuild UI after loading data
+    }
+  }
+
+  // Save current state to SharedPreferences
+  Future<void> _saveToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String encodedData = jsonEncode(
+      _todos.map((todo) => todo.toMap()).toList(),
+    );
+    await prefs.setString('saved_todos', encodedData);
+  }
+
+  // --------------------------------------------------- //
 
   String get filterPriority => _filterPriority;
 
@@ -59,13 +67,14 @@ class TodoProvider extends ChangeNotifier {
   int get completedTasks => _todos.where((todo) => todo.isCompleted).length;
   int get pendingTasks => totalTasks - completedTasks;
 
-  // Add a new todo
+  // Add a new todo and save locally
   void addTodo(TodoModel todo) {
     _todos.add(todo);
-    notifyListeners(); // This triggers the UI to rebuild
+    _saveToPrefs();
+    notifyListeners();
   }
 
-  // Toggle completed status
+  // Toggle completed status and save locally
   void toggleTodoStatus(String id) {
     final index = _todos.indexWhere((todo) => todo.id == id);
     if (index != -1) {
@@ -73,13 +82,15 @@ class TodoProvider extends ChangeNotifier {
       _todos[index] = _todos[index].copyWith(
         isCompleted: !_todos[index].isCompleted,
       );
+      _saveToPrefs();
       notifyListeners();
     }
   }
 
-  // Delete a todo
+  // Delete a todo and save locally
   void deleteTodo(String id) {
     _todos.removeWhere((todo) => todo.id == id);
+    _saveToPrefs();
     notifyListeners();
   }
 
